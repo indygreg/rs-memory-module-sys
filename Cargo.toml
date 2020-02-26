@@ -1,0 +1,21 @@
+[package]
+name = "memory-module-sys"
+version = "0.1.0"
+authors = ["Gregory Szorc <gregory.szorc@gmail.com>"]
+edition = "2018"
+description = "Bindings to the MemoryModule library for loading libraries from memory on Windows"
+readme = "README.md"
+license = "MPL-2.0"
+homepage = "https://github.com/indygreg/rs-memory-module-sys"
+repository = "https://github.com/indygreg/rs-memory-module-sys.git"
+keywords = ["windows"]
+build = "build.rs"
+
+[dependencies]
+libc = "0.2"
+
+[target.'cfg(windows)'.dependencies]
+winapi = {version = "0.3", features = ["minwindef"] }
+
+[build-dependencies]
+cc = "1.0"
