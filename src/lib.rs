@@ -30,7 +30,7 @@ pub type custom_free_fn = extern "C" fn(LPVOID, SIZE_T, DWORD, *mut c_void) -> B
 pub type custom_load_library_fn = extern "C" fn(LPCSTR, *mut c_void) -> HCUSTOMMODULE;
 pub type custom_get_proc_address_fn =
     extern "C" fn(HCUSTOMMODULE, LPCSTR, *mut c_void) -> FARPROC;
-pub type custom_free_library_fn = extern "C" fn(HCUSTOMMODULE, *mut c_void) -> c_void;
+pub type custom_free_library_fn = extern "C" fn(HCUSTOMMODULE, *mut c_void);
 
 extern "C" {
     /// Load exe/dll from memory location with the given size.
