@@ -25,12 +25,12 @@ pub type HMEMORYMODULE = *const c_void;
 pub type HMEMORYRSRC = *const c_void;
 pub type HCUSTOMMODULE = *const c_void;
 
-pub type custom_alloc_fn = extern "C" fn(LPVOID, SIZE_T, DWORD, DWORD, *const c_void) -> LPVOID;
-pub type custom_free_fn = extern "C" fn(LPVOID, SIZE_T, DWORD, *const c_void) -> BOOL;
-pub type custom_load_library_fn = extern "C" fn(LPCSTR, *const c_void) -> HCUSTOMMODULE;
+pub type custom_alloc_fn = extern "C" fn(LPVOID, SIZE_T, DWORD, DWORD, *mut c_void) -> LPVOID;
+pub type custom_free_fn = extern "C" fn(LPVOID, SIZE_T, DWORD, *mut c_void) -> BOOL;
+pub type custom_load_library_fn = extern "C" fn(LPCSTR, *mut c_void) -> HCUSTOMMODULE;
 pub type custom_get_proc_address_fn =
-    extern "C" fn(HCUSTOMMODULE, LPCSTR, *const c_void) -> FARPROC;
-pub type custom_free_library_fn = extern "C" fn(HCUSTOMMODULE, *const c_void) -> c_void;
+    extern "C" fn(HCUSTOMMODULE, LPCSTR, *mut c_void) -> FARPROC;
+pub type custom_free_library_fn = extern "C" fn(HCUSTOMMODULE, *mut c_void) -> c_void;
 
 extern "C" {
     /// Load exe/dll from memory location with the given size.
@@ -51,7 +51,7 @@ extern "C" {
         load_library: custom_load_library_fn,
         get_process_address: custom_get_proc_address_fn,
         free_library: custom_free_library_fn,
-        user_data: *const c_void,
+        user_data: *mut c_void,
     ) -> HMEMORYMODULE;
 
     /// Get address of exported method. Supports loading both by name and by ordinal
@@ -116,7 +116,7 @@ extern "C" {
         size: SIZE_T,
         allocation_type: DWORD,
         protect: DWORD,
-        user_data: *const c_void,
+        user_data: *mut c_void,
     ) -> LPVOID;
 
     /// Default implementation of CustomFreeFunc that calls VirtualFree
@@ -127,14 +127,14 @@ extern "C" {
         address: LPVOID,
         size: SIZE_T,
         free_type: DWORD,
-        user_data: *const c_void,
+        user_data: *mut c_void,
     ) -> BOOL;
 
     /// Default implementation of CustomLoadLibraryFunc that calls LoadLibraryA
     /// internally to load an additional libary.
     ///
     /// This is the default as used by MemoryLoadLibrary.
-    pub fn MemoryDefaultLoadLibrary(filename: LPCSTR, user_data: *const c_void) -> HCUSTOMMODULE;
+    pub fn MemoryDefaultLoadLibrary(filename: LPCSTR, user_data: *mut c_void) -> HCUSTOMMODULE;
 
     /// Default implementation of CustomGetProcAddressFunc that calls GetProcAddress
     /// internally to get the address of an exported function.
@@ -143,12 +143,12 @@ extern "C" {
     pub fn MemoryDefaultGetProcAddress(
         module: HCUSTOMMODULE,
         name: LPCSTR,
-        user_data: *const c_void,
+        user_data: *mut c_void,
     ) -> FARPROC;
 
     /// Default implementation of CustomFreeLibraryFunc that calls FreeLibrary
     /// internally to release an additional library.
     ///
     /// This is the default as used by MemoryLoadLibrary().
-    pub fn MemoryDefaultFreeLibrary(module: HCUSTOMMODULE, user_data: *const c_void);
+    pub fn MemoryDefaultFreeLibrary(module: HCUSTOMMODULE, user_data: *mut c_void);
 }
