@@ -59,7 +59,7 @@ extern "C" {
     pub fn MemoryGetProcAddress(module: HMEMORYMODULE, name: LPCSTR) -> FARPROC;
 
     /// Free previously loaded exe/dll.
-    pub fn MemoryFreeLibrary(module: HMEMORYMODULE) -> c_void;
+    pub fn MemoryFreeLibrary(module: HMEMORYMODULE);
 
     /// Execute entry point (EXE only).
     ///
@@ -150,5 +150,5 @@ extern "C" {
     /// internally to release an additional library.
     ///
     /// This is the default as used by MemoryLoadLibrary().
-    pub fn MemoryDefaultFreeLibrary(module: HCUSTOMMODULE, user_data: *const c_void) -> c_void;
+    pub fn MemoryDefaultFreeLibrary(module: HCUSTOMMODULE, user_data: *const c_void);
 }
