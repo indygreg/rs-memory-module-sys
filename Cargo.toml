@@ -19,3 +19,13 @@ winapi = {version = "0.3", features = ["minwindef"] }
 
 [build-dependencies]
 cc = "1.0"
+
+[package.metadata.docs.rs]
+default-target = "x86_64-pc-windows-msvc"
+targets = ["x86_64-pc-windows-msvc"]
+# Docs.rs does not have a C cross compiler for windows. This cfg is set so that
+# build.rs can know that it is in a docs.rs build and skip C compilation.
+#
+# https://github.com/rust-lang/docs.rs/issues/147#issuecomment-389544407
+rustc-args = ["--cfg",  "memory_module_sys_docs_rs"]
+rustdoc-args = ["--cfg", "memory_module_sys_docs_rs"]
